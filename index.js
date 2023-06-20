@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 //import from other files
 
 const authRouter = require("./routes/auth");
+const adminRoute = require("./routes/admin");
+const productRouter = require("./routes/product");
 //init
 const PORT = 3000;
 const app = express();
@@ -15,7 +17,8 @@ const DB =
 //app.use(express.json()); passes incoming requests with json payloads 
 app.use(express.json());
 app.use(authRouter);
-
+app.use(adminRoute);
+app.use(productRouter);
 //connections
 mongoose
   .connect(DB)

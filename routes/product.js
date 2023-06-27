@@ -1,7 +1,7 @@
 const express = require("express");
 const productRouter = express.Router();
 const auth = require("../middlewares/auth");
-const Product = require("../models/product");
+const {Product} = require("../models/product");
 
 //we want to get the category to get products for this certain category
 //this is how we do it, using ? with req.querey mark to get what we want
@@ -50,6 +50,29 @@ productRouter.post("/api/rate-product", auth, async (req, res) => {
     product.ratings.push(ratingSchema);
     product = await product.save();
     res.json(product);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+productRouter.get("/api/deal-of-day", auth, async (req, res) => {
+  try {
+    let products = await Product.find({});
+    //checking which has the highest rating to display it as the deal of the day
+    products = products.sort((productX, productY) => {
+      let xSum = 0;
+      let ySum = 0;
+
+      for (let i = 0; i < productX.ratings.length; i++) {
+        xSum += productX.ratings[i].rating;
+      }
+      for (let i = 0; i < productY.ratings.length; i++) {
+        ySum += productY.ratings[i].rating;
+      }
+      return xSum < ySum ? 1 : -1;
+    });
+
+    res.json(products[0]);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

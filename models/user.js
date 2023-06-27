@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { productSchema } = require("./product");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -19,27 +20,34 @@ const userSchema = mongoose.Schema({
       message: "Please enter a valid email address",
     },
   },
-    password: {
-      required: true,
-      type: String,
-      validate: {
-        validator: (value) => {
-          return value.length > 5;
-        },
-        message: "Password must be at least 6 characters",
+  password: {
+    required: true,
+    type: String,
+    validate: {
+      validator: (value) => {
+        return value.length > 5;
+      },
+      message: "Password must be at least 6 characters",
+    },
+  },
+  address: {
+    type: String,
+    default: "",
+  },
+  role: {
+    type: String,
+    default: "user",
+  },
+  cart: [
+    {
+      product: productSchema,
+      quantity: {
+        type: Number,
+        required: true,
       },
     },
-    address: {
-      type: String,
-      default: "",
-    },
-    role: {
-      type: String,
-      default: "user",
-    },
-    //cart later to do
-  },
-);
+  ],
+});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

@@ -16,7 +16,7 @@ const productSchema = mongoose.Schema({
     {
       type: String,
       required: true,
-    }, 
+    },
   ],
   quantity: {
     type: Number,
@@ -36,4 +36,4 @@ const productSchema = mongoose.Schema({
 
 const Product = mongoose.model("Product", productSchema);
 
-module.exports = Product;
+module.exports = { Product, productSchema };
